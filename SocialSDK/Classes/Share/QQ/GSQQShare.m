@@ -39,14 +39,12 @@
     [self handleSendResult:sent];
 }
 
-- (void)shareSingleImage:(id)image title:(NSString *)title description:(NSString *)description
+- (void)shareSingleImage:(id)image thumb:(id)thumb title:(NSString *)title description:(NSString *)description
 {
-    QQApiImageObject *img;
-    if ([image isKindOfClass:[NSData class]]) {
-        img = [QQApiImageObject objectWithData:image previewImageData:image title:title description:description];
-    } else if ([image isKindOfClass:[UIImage class]]) {
-        img = [QQApiImageObject objectWithData:UIImagePNGRepresentation(image) previewImageData:UIImagePNGRepresentation(image) title:title description:description];
-    }
+    NSData *imageData = [image isKindOfClass:[NSData class]]?image:([image isKindOfClass:[UIImage class]]?UIImagePNGRepresentation(image):nil);
+    NSData *thumbData = [thumb isKindOfClass:[NSData class]]?thumb:([thumb isKindOfClass:[UIImage class]]?UIImagePNGRepresentation(thumb):nil);
+    
+    QQApiImageObject *img = [QQApiImageObject objectWithData:imageData previewImageData:thumbData title:title description:description];
     [img setCflag:kQQAPICtrlFlagQQShare];
     SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:img];
     QQApiSendResultCode sent = [QQApiInterface sendReq:req];

@@ -39,7 +39,7 @@
     
 }
 
-- (void)shareSingleImage:(id)image title:(NSString *)title description:(NSString *)description
+- (void)shareSingleImage:(id)image thumb:(id)thumb title:(NSString *)title description:(NSString *)description
 {
     
 }

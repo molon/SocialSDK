@@ -39,17 +39,16 @@
     [WeiboSDK sendRequest:request];
 }
 
-- (void)shareSingleImage:(id)image title:(NSString *)title description:(NSString *)description
+- (void)shareSingleImage:(id)image thumb:(id)thumb title:(NSString *)title description:(NSString *)description
 {
-    WBMessageObject *message = [WBMessageObject message];
+    NSData *imageData = [image isKindOfClass:[NSData class]]?image:([image isKindOfClass:[UIImage class]]?UIImagePNGRepresentation(image):nil);
     
+    WBMessageObject *message = [WBMessageObject message];
     message.text = title;
+    
     WBImageObject *imageObject = [WBImageObject object];
-    if ([image isKindOfClass:[NSData class]]) {
-        imageObject.imageData = image;
-    } else if ([image isKindOfClass:[UIImage class]]) {
-        imageObject.imageData = UIImagePNGRepresentation(image);
-    }
+    imageObject.imageData = imageData;
+    
     message.imageObject = imageObject;
     WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message authInfo:[self authRequest] access_token:nil];
     [WeiboSDK sendRequest:request];

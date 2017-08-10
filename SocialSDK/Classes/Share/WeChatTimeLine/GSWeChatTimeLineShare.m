@@ -39,15 +39,17 @@
     [WXApi sendReq:req];
 }
 
-- (void)shareSingleImage:(id)image title:(NSString *)title description:(NSString *)description
+- (void)shareSingleImage:(id)image thumb:(id)thumb title:(NSString *)title description:(NSString *)description
 {
+    NSData *imageData = [image isKindOfClass:[NSData class]]?image:([image isKindOfClass:[UIImage class]]?UIImagePNGRepresentation(image):nil);
+    NSData *thumbData = [thumb isKindOfClass:[NSData class]]?thumb:([thumb isKindOfClass:[UIImage class]]?UIImagePNGRepresentation(thumb):nil);
+
+    
     WXImageObject *ext = [WXImageObject object];
-    if ([image isKindOfClass:[NSData class]]) {
-        ext.imageData = image;
-    } else if ([image isKindOfClass:[UIImage class]]) {
-        ext.imageData = UIImagePNGRepresentation(image);
-    }
+    ext.imageData = imageData;
+    
     WXMediaMessage *message = [WXMediaMessage message];
+    message.thumbData = thumbData;
     message.title = title;
     message.description = description;
     message.mediaObject = ext;
